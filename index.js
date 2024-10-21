@@ -4,12 +4,21 @@ const app = express();
 const port = 3000;
 const usersRouter = require("./routes/users.js")
 
+// MIDDLWARE
 app.use(express.json());
 
-// MIDDLEWARE
-app.use("/api/", usersRouter)
+// CORS
+app.use((req, res, next) => {
+	res.setHeader("Access-Control-Allow-Origin", "*")
+	res.setHeader(
+		"Access-Control-Allow-Headers",
+		"Origin, X-Requested-With, Content, Accept, Content-Type, x-api-key"
+	)
+	res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+	next()
+})
 
-// usres endpoint
+// USERS ENDPOINT
 app.use("/api/", usersRouter)
 
 // GET METHOD

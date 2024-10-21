@@ -1,62 +1,18 @@
 const express = require("express")
 const router = express.Router()
-
-const db = require("../database")
+const { checkApiKey } = require("../middleware/checkApiKey")
+const { getAllUsers, createNewUser, updateUser, deleteUser } = require("../controllers/usersControllers")
 
 // GET METHOD
-router.get("/users", (req, res) => {
-	db.all('SELECT * FROM users', [], (err, rows) => {
-		if (err) {
-		  res.status(500).json({ error: err.message });
-		} else {
-		  res.json(rows);
-		}
-	  });
-})
+router.get("/users", checkApiKey, getAllUsers)
 
 // POST METHOD
-router.post("/", (req, res) => {
-	const { firstName, lastName } = req.body
-
-	res.status(201).json({
-		msg: "This the message from POST ",
-		firstName,
-		lastName,
-	})
-})
+router.post("/users", checkApiKey, createNewUser)
 
 // PUT METHOD
-router.put("/:id", (req, res) => {
-	const { firstName, lastName } = req.body
-
-	// get the id from the params
-	const userId = req.params.id
-
-	// find the user with this ID, if the user is not found we need to send a 404 status code
-    // you need to write the logic here
-    if (!user) {
-        res.status(404).json({
-            msg: "User not found"
-        })
-
-	// // check what data was sent
-	if (firstName) {
-    	user.firstName = firstName	
-	}
-
-		res.json({
-			msg: "This the message from PUT ",
-			userId,
-			firstName,
-			lastName,
-		})
-}})
+router.put("/:id", checkApiKey, updateUser)
 
 // DELETE METHOD
-router.delete("/:id", (req, res) => {
-	res.json({
-		msg: "This the message from DELETE ",
-	})
-})
+router.delete("/:id", checkApiKey, deleteUser)
 
 module.exports = router
