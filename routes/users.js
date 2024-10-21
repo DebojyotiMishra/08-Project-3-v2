@@ -1,13 +1,17 @@
 const express = require("express")
 const router = express.Router()
 
-const userArray = []
+const db = require("../database")
 
 // GET METHOD
 router.get("/users", (req, res) => {
-	res.json({
-		msg: "this is a test from the router",
-	})
+	db.all('SELECT * FROM users', [], (err, rows) => {
+		if (err) {
+		  res.status(500).json({ error: err.message });
+		} else {
+		  res.json(rows);
+		}
+	  });
 })
 
 // POST METHOD
